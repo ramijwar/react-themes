@@ -138,7 +138,7 @@ function route(string $method, string $path, array $query, array $headers, array
         }
 
         if ($method === 'POST' && $action === 'login') {
-            $identifier = strtolower(trim($in['identifier'] ?? ''));
+            $identifier = strtolower(trim($in['identifier'] ?? $in['username'] ?? ''));
             $password = $in['password'] ?? '';
             if ($identifier === '' || $password === '') throw new ApiError('أدخل بيانات الدخول');
             $st = db()->prepare('SELECT * FROM users WHERE username = ? OR email = ?');

@@ -9,6 +9,12 @@ export class ApiOfflineError extends Error {
 
 const TOKEN_KEY = 'rts_token';
 
+/** قاعدة الـ API النسبية — تعمل من الجذر أو أي مجلد فرعي (مثل /themes/) */
+export function apiBase(): string {
+  const dir = window.location.pathname.replace(/[^/]*$/, ''); // '/themes/' أو '/'
+  return `${dir}api`;
+}
+
 export function getToken(): string | null {
   return localStorage.getItem(TOKEN_KEY);
 }
@@ -37,7 +43,7 @@ async function req<T = any>(path: string, opts: { method?: string; body?: any; a
   if (token && opts.auth !== false) headers['Authorization'] = `Bearer ${token}`;
   let res: Response;
   try {
-    res = await fetch(`/api${path}`, {
+    res = await fetch(`${apiBase()}${path}`, {
       method: opts.method || 'GET',
       headers,
       body: opts.body !== undefined ? JSON.stringify(opts.body) : undefined,
@@ -70,6 +76,7 @@ export const api = {
 
   /* الثيمات الجاهزة */
   themes: () => req<{ themes: any[] }>('/themes'),
+  themesAll: () => req<{ themes: any[] }>('/themes?all=1'),
 
   /* القوالب */
   templates: () => req<{ templates: any[] }>('/templates'),

@@ -33,6 +33,28 @@ php -S 0.0.0.0:8080 server/router.php   # نافذة أولى — الـ API
 npm run dev                             # نافذة ثانية — vite على 5173 مع proxy لـ /api
 ```
 
+## ▲ النشر على cPanel (استضافة مشتركة)
+
+استخدم حزمة **`themes-cpanel.zip`** الجاهزة — لا حاجة لأي أوامر تقريباً:
+
+1. افتح **File Manager** في cPanel وادخل إلى `public_html`.
+2. ارفع `themes-cpanel.zip` ثم **Extract** — ستحصل على مجلد `public_html/themes/`
+   يحوي: `index.html` و`assets/` و`api.php` و`.htaccess` و`server/`.
+3. تأكد أن PHP في الاستضافة **8.1+** مع `pdo_sqlite` (مفعّل افتراضياً في الغالبية).
+4. جرّب: `https://yourdomain.com/themes/api/health` → يجب أن يظهر `{"ok":true,...}`
+5. افتح التطبيق: `https://yourdomain.com/themes/`
+   ودخول المدير: `admin / admin123` — **غيّرها فوراً من لوحة الإدارة**.
+
+ملاحظات مهمة:
+
+- الروابط **نسبية** — تعمل الحزمة في أي مجلد فرعي (`/themes/` أو غيره) أو في الجذر مباشرة.
+- `.htaccess` يقوم بثلاث مهام: حظر الوصول الويبّي لمجلد `server/`،
+  توجيه أي طلب يبدأ بـ `api/` إلى `api.php`، وإرجاع المسارات الأخرى إلى `index.html` (SPA).
+- قاعدة بيانات SQLite تُنشأ تلقائياً في `server/data/app.sqlite` مع `.htaccess` داخلي يمنع تحميلها.
+- لا تستخدم `start.sh` على cPanel — هو لخادم PHP المدمج محلياً فقط.
+- عند ظهور خطأ 500: راجع `error_log` في cPanel وتأكد أن `AllowOverride All` مفعّل.
+- القوالب الثلاثون تُزرع تلقائياً في أول تشغيل من `server/seed/themes.seed.json`.
+
 ## ▲ المزايا
 
 - **نظام عضوية**: تسجيل/دخول برموز Bearer، جلسات 30 يوماً، حظر الأعضاء، أدوار (admin/user).

@@ -27,8 +27,7 @@ export default function Admin() {
     setLoading(true);
     try {
       const [s, u, t, th] = await Promise.all([
-        api.adminStats(), api.adminUsers(), api.adminTemplates(),
-        fetch('/api/themes?all=1', { headers: { Authorization: `Bearer ${localStorage.getItem('rts_token') || ''}` } }).then((r) => r.json()),
+        api.adminStats(), api.adminUsers(), api.adminTemplates(), api.themesAll(),
       ]);
       setStats(s.stats); setUsers(u.users); setTemplates(t.templates); setThemes(th.themes || []);
     } catch (e: any) {

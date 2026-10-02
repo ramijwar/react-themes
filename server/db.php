@@ -10,6 +10,11 @@ function db(): PDO
 
     $dir = __DIR__ . '/data';
     if (!is_dir($dir)) @mkdir($dir, 0777, true);
+    /* حماية مجلد القاعدة من الوصول الويب المباشر */
+    $deny = $dir . '/.htaccess';
+    if (!is_file($deny)) {
+        @file_put_contents($deny, "<IfModule mod_authz_core.c>\nRequire all denied\n</IfModule>\n<IfModule !mod_authz_core.c>\nOrder deny,allow\nDeny from all\n</IfModule>\n");
+    }
     $file = $dir . '/app.sqlite';
 
     $pdo = new PDO('sqlite:' . $file);

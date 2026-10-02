@@ -39,7 +39,13 @@ function api_bootstrap(string $uri): void
         return;
     }
 
-    $path = preg_replace('#^/api#', '', $uri) ?: '/';
+    /* استخراج مسار الـ API مهما كان موقع التثبيت (جذر أو مجلد فرعي مثل /themes/) */
+    $full = parse_url($uri, PHP_URL_PATH) ?: '/';
+    if (preg_match('#^(.*?)/api(/.*)?$#', $full, $m)) {
+        $path = ($m[2] ?? '') === '' ? '/' : $m[2];
+    } else {
+        $path = $full;
+    }
     $rawBody = file_get_contents('php://input') ?: '';
     $res = handle_api($method, $path, $_GET, collect_headers(), $rawBody);
     emit($res);
