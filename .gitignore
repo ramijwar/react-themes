@@ -1,6 +1,5 @@
 node_modules
 dist
-*.zip
 server/data/*.sqlite
 server/data/*.sqlite-journal
 server/data/*.sqlite-wal
