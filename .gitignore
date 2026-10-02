@@ -1,0 +1,13 @@
+node_modules
+dist
+*.zip
+server/data/*.sqlite
+server/data/*.sqlite-journal
+server/data/*.sqlite-wal
+server/data/*.sqlite-shm
+.DS_Store
+*.local
+.vite
+
+scripts/.*.cjs
+scripts/.*.mjs
